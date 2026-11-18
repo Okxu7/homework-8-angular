@@ -1,0 +1,31 @@
+.custom-input {
+  padding: 8px;
+  width: 250px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+/* Стан: поле невалідне і користувач вже його торкався (touched) */
+.custom-input.ng-invalid.ng-touched {
+  border-color: #dc3545; /* Червона рамка */
+  background-color: #fff8f8;
+}
+
+/* Стан: поле повністю валідне і користувач його торкався */
+.custom-input.ng-valid.ng-touched {
+  border-color: #28a745; /* Зелена рамка */
+  background-color: #f8fff9;
+}
+
+.error-text {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}

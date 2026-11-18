@@ -1,0 +1,168 @@
+
+
+
+
+
+<div style="padding: 20px; font-family: Arial, sans-serif;">
+  <h2>Завдання 1: Проста форма (Template-driven)</h2>
+  
+  <!-- Подія (ngSubmit) викликає наш метод при натисканні кнопки -->
+  <form (ngSubmit)="onSubmit()" #task1Form="ngForm">
+    
+    <div style="margin-bottom: 15px;">
+      <label>E-mail:</label><br>
+      <input type="email" name="email" [(ngModel)]="user.email" required style="padding: 5px; width: 200px;">
+    </div>
+    
+    <div style="margin-bottom: 15px;">
+      <label>Пароль:</label><br>
+      <input type="password" name="password" [(ngModel)]="user.password" required style="padding: 5px; width: 200px;">
+    </div>
+    
+    <button type="submit" style="padding: 8px 15px; cursor: pointer;">Надіслати</button>
+  </form>
+
+  <!-- Цей блок з'явиться тільки після натискання кнопки -->
+  <div *ngIf="submittedData" style="margin-top: 20px; background: #e6f7ff; padding: 15px; border-radius: 5px;">
+    <strong>Виведення через пайп json:</strong>
+    <pre>{{ submittedData | json }}</pre>
+  </div>
+
+
+
+
+ 
+
+  <hr style="margin: 30px 0;">
+
+  <!-- ================= ЗАВДАННЯ 2 ================= -->
+<!-- Створіть форму за завданням, описаним вище, використовуючи реактивні форми. Додайте полям валідацію та відповідні стилі, що відображають їхній стан. -->
+
+  <h2>Завдання 2: Реактивна форма з валідацією</h2>
+  
+  <form [formGroup]="reactiveForm" (ngSubmit)="onSubmitReactive()">
+    
+    <div style="margin-bottom: 15px;">
+      <label>E-mail:</label><br>
+      <input type="email" formControlName="email" class="custom-input">
+      
+      <!-- Повідомлення про помилку для email -->
+      <div class="error-text" *ngIf="reactiveForm.get('email')?.invalid && reactiveForm.get('email')?.touched">
+        Будь ласка, введіть коректний email.
+      </div>
+    </div>
+    
+    <div style="margin-bottom: 15px;">
+      <label>Пароль:</label><br>
+      <input type="password" formControlName="password" class="custom-input">
+      
+      <!-- Повідомлення про помилку для пароля -->
+      <div class="error-text" *ngIf="reactiveForm.get('password')?.invalid && reactiveForm.get('password')?.touched">
+        Пароль є обов'язковим і має містити мінімум 6 символів.
+      </div>
+    </div>
+    
+    <!-- Кнопка блокується, якщо форма невалідна -->
+    <button type="submit" [disabled]="reactiveForm.invalid" style="padding: 8px 15px; cursor: pointer;">
+      Надіслати (Реактивна)
+    </button>
+  </form>
+
+  <!-- Виведення результату на екран -->
+  <div *ngIf="reactiveSubmittedData" style="margin-top: 20px; background: #e6ffec; padding: 15px; border-radius: 5px;">
+    <strong>Результат Завдання 2 (через json пайп):</strong>
+    <pre>{{ reactiveSubmittedData | json }}</pre>
+  </div>
+
+</div>
+
+
+<hr style="margin: 30px 0;">
+
+  <!-- ================= ЗАВДАННЯ 3 ================= -->
+  <h2>Завдання 3: FormBuilder, Checkbox та FormArray</h2>
+  
+  <form [formGroup]="task3Form" (ngSubmit)="onSubmitTask3()">
+    
+    <!-- E-mail -->
+    <div style="margin-bottom: 15px;">
+      <label>E-mail:</label><br>
+      <input type="email" formControlName="email" class="custom-input">
+<!--  -->
+<div class="error-text" *ngIf="task3Form.get('email')?.invalid && (task3Form.get('email')?.dirty || task3Form.get('email')?.touched)">
+  <span *ngIf="task3Form.get('email')?.errors?.['required']">
+    Поле E-mail є обов'язковим.
+  </span>
+  <span *ngIf="task3Form.get('email')?.errors?.['email']">
+    Введіть коректний E-mail (має містити @ та домен).
+  </span>
+</div>
+
+<!--  -->
+    </div>
+    
+    <!-- Пароль -->
+    <div style="margin-bottom: 15px;">
+      <label>Пароль:</label><br>
+      <input type="password" formControlName="password" class="custom-input">
+<!--  -->
+
+<div class="error-text" *ngIf="task3Form.get('password')?.invalid && (task3Form.get('password')?.dirty || task3Form.get('password')?.touched)">
+  <span *ngIf="task3Form.get('password')?.errors?.['required']">
+    Пароль є обов'язковим.
+  </span>
+  <span *ngIf="task3Form.get('password')?.errors?.['minlength']">
+    Пароль занадто короткий (мінімум 6 символів).
+  </span>
+</div>
+
+<!--  -->
+    </div>
+
+    <!-- Захоплення (FormArray) -->
+    <div style="margin-bottom: 15px; padding: 15px; border: 1px solid #ccc; border-radius: 5px; background: #f9f9f9;">
+      <h3 style="margin-top: 0;">Ваші захоплення (FormArray)</h3>
+      
+      <div formArrayName="hobbies">
+        <div *ngFor="let hobby of hobbies.controls; let i = index" style="margin-bottom: 10px;">
+          <input [formControlName]="i" placeholder="Захоплення {{ i + 1 }}" class="custom-input">
+        </div>
+      </div>
+
+      <button type="button" (click)="addHobby()" style="padding: 6px 12px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">
+        + Додати захоплення
+      </button>
+    </div>
+
+    <!-- Чекбокс -->
+    <div style="margin-bottom: 15px;">
+      <label style="cursor: pointer;">
+        <input type="checkbox" formControlName="agreeToTerms">
+        Підтверджую правильність заповненої форми
+      </label>
+      <!--  -->
+<!-- <div class="error-text" *ngIf="task3Form.get('agreeToTerms')?.invalid && (task3Form.get('agreeToTerms')?.dirty || task3Form.get('agreeToTerms')?.touched)">
+  Потрібно поставити галочку для підтвердження.
+</div> -->
+
+<div class="error-text" *ngIf="task3Form.get('agreeToTerms')?.invalid">
+  Потрібно поставити галочку для підтвердження.
+</div>
+
+      <!--  -->
+    </div>
+    
+    <!-- Кнопка блокується, якщо форма невалідна або чекбокс не відмічено -->
+    <button type="submit" [disabled]="task3Form.invalid" style="padding: 10px 20px; font-weight: bold; cursor: pointer;">
+      Надіслати (Завдання 3)
+    </button>
+  </form>
+
+  <!-- Виведення результату -->
+  <div *ngIf="task3SubmittedData" style="margin-top: 25px; background: #e6ffed; padding: 15px; border-left: 5px solid #28a745;">
+    <strong>Результат Завдання 3:</strong>
+    <pre>{{ task3SubmittedData | json }}</pre>
+  </div>
+
+
+ 
